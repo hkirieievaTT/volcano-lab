@@ -1,0 +1,18 @@
+apiVersion: scheduling.volcano.sh/v1beta1
+kind: Queue
+metadata:
+  name: q1
+spec:
+  weight: 1
+  priority: 1
+  reclaimable: true
+
+---
+apiVersion: scheduling.volcano.sh/v1beta1
+kind: Queue
+metadata:
+  name: q2
+spec:
+  weight: 2
+  priority: 2
+  reclaimable: false

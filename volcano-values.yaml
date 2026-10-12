@@ -1,0 +1,21 @@
+# Helm values for the lab's Volcano install (chart volcano-sh/volcano 1.15.3).
+# Same as the chart's default scheduler config, plus the "reclaim" action.
+#   helm install volcano volcano-sh/volcano --version 1.15.3 \
+#     -n volcano-system --create-namespace -f volcano-values.yaml
+custom:
+  scheduler_config_override: |
+    actions: "enqueue, allocate, backfill, reclaim"
+    tiers:
+    - plugins:
+      - name: priority
+      - name: gang
+        enablePreemptable: false
+      - name: conformance
+    - plugins:
+      - name: overcommit
+      - name: drf
+        enablePreemptable: false
+      - name: predicates
+      - name: proportion
+      - name: nodeorder
+      - name: binpack

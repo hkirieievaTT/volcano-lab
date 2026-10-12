@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: q1-work
+spec:
+  replicas: 0
+  selector: {matchLabels: {app: q1-work}}
+  template:
+    metadata:
+      labels: {app: q1-work}
+      annotations:
+        scheduling.volcano.sh/queue-name: q1
+        volcano.sh/preemptable: "true"
+    spec:
+      schedulerName: volcano
+      terminationGracePeriodSeconds: 0
+      containers:
+      - name: busy
+        image: busybox
+        command: ["sleep", "infinity"]
+        resources:
+          requests: {cpu: "1", memory: "64Mi"}
+          limits:   {cpu: "1", memory: "64Mi"}
