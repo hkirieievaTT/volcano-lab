@@ -4,6 +4,13 @@
 # PodGroup (minMember 1); reclaim only acts for PodGroups below minMember, so a
 # Deployment (one PodGroup for all replicas) stops reclaiming after its first pod runs.
 set -euo pipefail
+if [ $# -ne 2 ]; then echo "Usage: ./pods.sh <queue> <count>" >&2; exit 2; fi
+ctx=$(kubectl config current-context 2>/dev/null || true)
+if [ "$ctx" != kind-volcano-lab ]; then
+  echo "Refusing to run: kubectl context is '${ctx:-none}', not kind-volcano-lab." >&2
+  echo "Run: export KUBECONFIG=\$HOME/.kube/volcano-lab.yaml" >&2
+  exit 1
+fi
 q=$1; want=$2
 have=$(kubectl get pods -l queue="$q" --no-headers 2>/dev/null | wc -l | tr -d ' ')
 
